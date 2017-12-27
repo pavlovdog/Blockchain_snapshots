@@ -1,0 +1,44 @@
+general:
+  blocks_pool_size: 20
+  coins: ["bitcoin"]
+  check_rpc: true
+bitcoin:
+  auth: true
+  rpc_ip: 173.212.247.223
+  rpc_port: 8332
+  rpc_user: MYOWN
+  rpc_password: 5MEZVTJW4VqpQvDbzzRX6Gg7
+  block_number: 1000
+dash:
+  auth: true
+  rpc_ip: 127.0.0.1
+  rpc_port: 8342
+  rpc_user: USERNAME
+  rpc_password: PASSWORD
+  block_number: 300000
+zcash:
+  auth: true
+  rpc_ip: 127.0.0.1
+  rpc_port: 8352
+  rpc_user: USERNAME
+  rpc_password: PASSWORD
+  block_number: 300000
+litecoin:
+  auth: true
+  rpc_ip: 127.0.0.1
+  rpc_port: 8352
+  rpc_user: USERNAME
+  rpc_password: PASSWORD
+  block_number: 300000
+monero:
+  auth: true
+  rpc_ip: 127.0.0.1
+  rpc_port: 8352
+  rpc_user: USERNAME
+  rpc_password: PASSWORD
+  block_number: 300000
+ethereum:
+  auth: false
+  rpc_ip: 127.0.0.1
+  rpc_port: 8445
+  block_number: 200000

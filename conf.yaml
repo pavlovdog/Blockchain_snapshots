@@ -1,14 +1,15 @@
 general:
-  blocks_pool_size: 20
+  blocks_pool_size: 10
   coins: ["bitcoin"]
   check_rpc: true
+  drop_db: true
 bitcoin:
   auth: true
   rpc_ip: 173.212.247.223
   rpc_port: 8332
   rpc_user: MYOWN
   rpc_password: 5MEZVTJW4VqpQvDbzzRX6Gg7
-  block_number: 1000
+  block_number: 10000
 dash:
   auth: true
   rpc_ip: 127.0.0.1

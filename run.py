@@ -54,6 +54,11 @@ if __name__ == "__main__":
             logger.error("Error while checking the '{}' RPC - {}".format(coin_name, e))
             exit(1)
 
+    # Drop Redis state for each coin name as a key
+    r = redis.Redis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
+    for coin_name in coins:
+        if conf['general']['drop_db']: r.delete(coin_name)
+
     # Get the blockchain snapshot for each coin
     for coin_name in coins:
         logger.info("Getting '{}' state...".format(coin_name))

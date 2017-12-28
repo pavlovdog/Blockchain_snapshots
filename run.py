@@ -75,10 +75,13 @@ if __name__ == "__main__":
             logger.error("Node has only {} blocks ({} blocks requested)!".format(last_block, height_to_process))
             exit(1)
 
-        with Pool(conf['general']['blocks_pool_size']) as p:
-            part = partial(tools.update_addresses_from_the_block, coin_provider=coin_provider)
-            r = list(tqdm(
-                p.imap(part, range(height_to_process)),
-                total=height_to_process,
-                desc="Processing '{}' blocks".format(coin_name)
-            ))
+        p = Pool(conf['general']['blocks_pool_size'])
+        part = partial(tools.update_addresses_from_the_block, coin_provider=coin_provider)
+        result = list(tqdm(
+            p.imap(part, range(height_to_process)),
+            total=height_to_process,
+            desc="Processing '{}' blocks".format(coin_name)
+        ))
+
+        p.close()
+        p.join()

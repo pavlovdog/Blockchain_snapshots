@@ -42,7 +42,9 @@ def update_addresses_from_the_block(height, coin_provider):
             update_address_balance(r, coin_provider.name, address, -vout['value'])
 
         for vout in txn['vout']:  # Iterate on each output
-            if len(vout['scriptPubKey']['addresses']) != 1: print (tx_hash)
+            if 'addresses' not in vout['scriptPubKey']: continue
+            if len(vout['scriptPubKey']['addresses']) != 1: continue
+
             address = vout['scriptPubKey']['addresses'][0]
             update_address_balance(r, coin_provider.name, address, vout['value'])
 

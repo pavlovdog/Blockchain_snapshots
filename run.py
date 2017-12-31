@@ -11,7 +11,8 @@ import logging
 import providers
 import redis
 
-logger = logging.getLogger(__name__)
+# - Set up logging
+logger = logging.getLogger("Blockchain_snapshots")
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s [%(levelname)s] (%(filename)s, %(lineno)s) %(message)s")
 
@@ -20,7 +21,13 @@ log_console = logging.StreamHandler()
 log_console.setLevel(logging.INFO)
 log_console.setFormatter(formatter)
 
+# -- Log to file
+log_file = logging.FileHandler('parser.log')
+log_file.setLevel(logging.DEBUG)
+log_file.setFormatter(formatter)
+
 logger.addHandler(log_console)
+logger.addHandler(log_file)
 
 parser = ArgumentParser()
 parser.add_argument('--conf', '-c', default="conf.yaml", type=str,
@@ -76,20 +83,14 @@ if __name__ == "__main__":
             exit(1)
 
         p = Pool(conf['general']['blocks_pool_size'])
-        part = partial(tools.update_addresses_from_the_block, coin_provider=coin_provider, pool_size=conf['general']['blocks_pool_size'])
+        part = partial(tools.update_addresses_from_the_block,
+            coin_provider=coin_provider, pool_size=conf['general']['blocks_pool_size']
+        )
         result = list(tqdm(
-            p.imap(part, range(height_to_process)),
+            p.imap(part, range(1, height_to_process+1)[::-1]),
             total=height_to_process,
             desc="Processing '{}' blocks".format(coin_name)
         ))
 
         p.close()
         p.join()
-
-        # Iterate on each block
-        # for block_number in tqdm(range(height_to_process), desc="Processing '{}' blocks".format(coin_name)):
-        #     tools.update_addresses_from_the_block(
-        #         height=block_number,
-        #         coin_provider=coin_provider,
-        #         pool_size=conf['general']['blocks_pool_size']
-        #     )

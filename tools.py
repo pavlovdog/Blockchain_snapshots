@@ -1,8 +1,11 @@
 import redis
+import logging
 
 from pprint import pprint
 from multiprocessing.pool import ThreadPool as Pool
 from functools import partial
+
+logger = logging.getLogger('Blockchain_snapshots')
 
 def update_address_balance(r, coin_name, address, balance_change):
     """
@@ -59,6 +62,8 @@ def update_addresses_from_the_block(height, coin_provider, **kwargs):
         affected address.
     """
 
+    logger.debug("Start processing block \#{}".format(height))
+
     txns_in_block = coin_provider.get_block_by_height(height)['tx']
 
     r = redis.Redis(host='127.0.0.1', port=6379, db=1, decode_responses=True)
@@ -73,5 +78,7 @@ def update_addresses_from_the_block(height, coin_provider, **kwargs):
 
     p.close()
     p.join()
+
+    logger.debug("Finish processing block \#{}".format(height))
 
     return None

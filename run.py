@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from multiprocessing import Pool
+from multiprocessing.pool import ThreadPool as Pool
 from sys import exit
 from pprint import pprint
 from tqdm import tqdm
@@ -76,7 +76,7 @@ if __name__ == "__main__":
             exit(1)
 
         p = Pool(conf['general']['blocks_pool_size'])
-        part = partial(tools.update_addresses_from_the_block, coin_provider=coin_provider)
+        part = partial(tools.update_addresses_from_the_block, coin_provider=coin_provider, pool_size=conf['general']['blocks_pool_size'])
         result = list(tqdm(
             p.imap(part, range(height_to_process)),
             total=height_to_process,
@@ -85,3 +85,11 @@ if __name__ == "__main__":
 
         p.close()
         p.join()
+
+        # Iterate on each block
+        # for block_number in tqdm(range(height_to_process), desc="Processing '{}' blocks".format(coin_name)):
+        #     tools.update_addresses_from_the_block(
+        #         height=block_number,
+        #         coin_provider=coin_provider,
+        #         pool_size=conf['general']['blocks_pool_size']
+        #     )

@@ -39,6 +39,7 @@ def get_affected_addresses(tx_hash, coin_provider):
         if 'coinbase' in vin.keys(): continue  # Coinbase transaction
         txid, output_number = vin['txid'], vin['vout']
         vout = coin_provider.get_txn_by_hash(txid)['vout'][output_number]
+        if 'addresses' not in vout['scriptPubKey']: continue
 
         address = vout['scriptPubKey']['addresses'][0]
         affected_addresses[address] = affected_addresses.get(address, 0) - vout['value']
